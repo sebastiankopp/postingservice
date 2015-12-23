@@ -1,1 +1,3 @@
 # postingservice
+
+A simple anonymous posting service based on Java EE 7 (Wildfly) and MongoDB. The given Java project is just a working title...
