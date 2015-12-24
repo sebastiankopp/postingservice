@@ -5,7 +5,11 @@ import java.util.logging.Logger;
 
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
-
+/**
+ * EJB interceptor for ensuring a high database performance. 
+ * @author Sebastian
+ *
+ */
 public class Stopwatch {
 	@AroundInvoke
 	public Object logTime (InvocationContext ctx) throws Exception{
@@ -15,7 +19,7 @@ public class Stopwatch {
 		} finally {
 			long diff = System.currentTimeMillis() - start;
 			Logger logger = Logger.getLogger(ctx.getClass().getName());
-			logger.log(Level.INFO, "Zeitverbrauch der Methode " + ctx.getMethod().getName() + ": " + diff + " ms.");
+			logger.log(Level.INFO, "The method " + ctx.getTarget().getClass().getName() +"."+ ctx.getMethod().getName() + " needs " + diff + " ms to be performed.");
 		}
 	}
 }

@@ -2,6 +2,7 @@ package de.sebikopp.ownjodel.helpers.convert;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bson.Document;
@@ -31,10 +32,10 @@ public class BsonMarshaller {
 				.append(ConstantValues.JBSON_KEY_POST_VOTES, votes);
 		return doc;
 	}
-	
+	// GeoJSON specification: [longitude (x-value), latitude (y-val)]
 	public static Document convertGeoposToBson(GeoPosition pos){
-		Document doc = new Document(ConstantValues.JBSON_KEY_GEOPOS_LATITUDE, pos.getLatitude())
-				.append(ConstantValues.JBSON_KEY_GEOPOS_LONGITUDE, pos.getLongitude());
+		Document doc = new Document(ConstantValues.BSON_GEO_KEY_LOCTYPE, ConstantValues.BSON_LOCTYPE_POINT)
+				.append(ConstantValues.BSON_GEO_KEY_COORDINATES, Arrays.asList(pos.getLongitude(), pos.getLatitude()));
 		return doc;
 	}
 	

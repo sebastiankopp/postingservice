@@ -53,6 +53,11 @@ public class Post {
 	public void setVotes(List<Vote> votes) {
 		this.votes = votes;
 	}
-	
+	@Override
+	public boolean equals (Object o){
+		if (o instanceof Post){
+			return ((Post) o).getId().equals(id);
+		} else return false;
+	}
 	
 }

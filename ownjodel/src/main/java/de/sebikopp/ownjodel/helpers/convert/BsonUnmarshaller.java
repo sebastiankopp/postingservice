@@ -69,11 +69,14 @@ public class BsonUnmarshaller {
 		return rc;
 	}
 	public static GeoPosition bsonToGeopos(Document src){
-		Double lat = src.getDouble(ConstantValues.JBSON_KEY_GEOPOS_LATITUDE);
-		Double lon = src.getDouble(ConstantValues.JBSON_KEY_GEOPOS_LONGITUDE);
+		if (!src.getString(ConstantValues.BSON_GEO_KEY_LOCTYPE).equals(ConstantValues.BSON_LOCTYPE_POINT)){
+			throw new IllegalArgumentException("Any other location types than points are currently not supported!");
+		}
+		@SuppressWarnings("unchecked")
+		List<Double> coords = (List<Double>) src.get(ConstantValues.BSON_GEO_KEY_COORDINATES);
 		GeoPosition rc = new GeoPosition();
-		rc.setLatitude(lat);
-		rc.setLongitude(lon);
+		rc.setLatitude(coords.get(1));
+		rc.setLongitude(coords.get(0));
 		return rc;
 	}
 	public static GeoLocSpot bsonToGeoLocSpot(Document src){

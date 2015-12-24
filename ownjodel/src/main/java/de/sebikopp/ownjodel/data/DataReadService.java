@@ -1,7 +1,9 @@
 package de.sebikopp.ownjodel.data;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -38,7 +40,7 @@ public class DataReadService {
 		mc.close();
 	}
 	@Interceptors(Stopwatch.class)
-	public List<Post> readNearPosts(GeoPosition pos){
+	public List<Post> readNearPosts(GeoPosition pos){ // TODO Query optimization using spatial Mongodb API
 		List<Post> rc = new ArrayList<>();
 		for (Document doc: collPosts.find()){
 			Post p = BsonUnmarshaller.bsonToPost(doc);
@@ -49,13 +51,13 @@ public class DataReadService {
 		return rc;
 	}
 	@Interceptors(Stopwatch.class)
-	public List<Post> readPostsByNamedLocation(String locname){
+	public List<Post> readPostsByNamedLocation(String locname){	
 		List<GeoLocSpot> spots = getLocationsByName(locname);
-		List<Post> rc = new ArrayList<>();
+		Set<Post> rc = new HashSet<>();
 		for (GeoLocSpot dd: spots){
 			rc.addAll(readNearPosts(dd.getPos()));
 		}
-		return rc;
+		return new ArrayList<>(rc);
 	}
 	@Interceptors(Stopwatch.class)
 	public List<GeoLocSpot> getAllNamedLocations(){
@@ -95,7 +97,7 @@ public class DataReadService {
 		}
 		return rc;
 	}
-	@Interceptors(Stopwatch.class)	// fürs Prototypenstadium
+	@Interceptors(Stopwatch.class)	// only intended for prototype phase
 	public List<Post> getAllPosts(){
 		List<Post> rc = new ArrayList<>();
 		for (Document dd: collPosts.find()){

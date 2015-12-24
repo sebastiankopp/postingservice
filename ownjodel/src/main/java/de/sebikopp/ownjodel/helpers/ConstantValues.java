@@ -5,7 +5,7 @@ public interface ConstantValues {
 	public static final String POSTS_COLLECTION = "postscollection";
 	public static final String LOCATIONS_COLLECTION = "locscollection";
 	
-	public static final String JBSON_KEY_POST_ID = "postid"; // nicht die technische ID
+	public static final String JBSON_KEY_POST_ID = "postid"; // self-created, non-technical ID
 	public static final String JBSON_KEY_POST_TITLE = "title";
 	public static final String JBSON_KEY_POST_CONTENT = "content";
 	public static final String JBSON_KEY_POST_SUBPOSTS = "subposts";
@@ -17,7 +17,7 @@ public interface ConstantValues {
 	public static final String JBSON_KEY_GEOPOS_LONGITUDE = "longitude";
 	
 	public static final String JBSON_KEY_GEO_LOC_SPOT_NAME = "name"; 
-	public static final String JBSON_KEY_GEO_LOC_SPOT_ID = "locid"; // nicht die technische id
+	public static final String JBSON_KEY_GEO_LOC_SPOT_ID = "locid"; // self-created, non-technical ID
 	public static final String JBSON_KEY_GEO_LOC_SPOT_GEOPOS = "pos";
 	
 	public static final String JBSON_KEY_VOTE_BOOL_UPVOTE = "upvote";
@@ -25,4 +25,10 @@ public interface ConstantValues {
 	
 	public static final String DATE_TIME_PATTERN = "YYYY-MM-dd HH:mm:ss";
 	
+	public static final String BSON_KEY_LOCATION = "location";
+	public static final String BSON_GEO_KEY_LOCTYPE = "type";
+	public static final String BSON_GEO_KEY_COORDINATES = "coordinates";
+	
+	public static final String BSON_LOCTYPE_POINT = "Point";
+	public static final String BSON_LOCTYPE_POLYGON = "Polygon";
 }

@@ -36,13 +36,6 @@ public class DataWriteService {
 	@Interceptors(Stopwatch.class)
 	public void persistNewPost(Post post) {
 		Document toIns = BsonMarshaller.postToBson(post);
-
-//		 Document postIdFindQuery = new
-//		 Document(ConstantValues.JBSON_KEY_POST_ID, post.getId());
-//		 long count = collPosts.count(postIdFindQuery);
-//		 if (count > 0)
-//		 throw new IllegalArgumentException("Id existiert bereits");
-
 		collPosts.insertOne(toIns);
 	}
 	@Interceptors(Stopwatch.class)
@@ -53,7 +46,6 @@ public class DataWriteService {
 	@Interceptors(Stopwatch.class)
 	public void persistNewLocation(GeoLocSpot gls) {
 		Document toIns = BsonMarshaller.geoLocSpotToBson(gls);
-
 		collLocs.insertOne(toIns);
 	}
 }
