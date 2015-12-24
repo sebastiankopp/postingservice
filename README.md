@@ -10,3 +10,5 @@ Dependencies needed at compile time are available at mavenCentral. Currently the
 * [MongoDB Java driver (currently used version: 3.0.4)](http://search.maven.org/#artifactdetails|org.mongodb|mongodb-driver|3.0.4|jar)
 
 These dependencies are auto-downloaded and included at compile time (see [pom.xml](https://github.com/sebikopp/postingservice/blob/master/ownjodel/pom.xml)).
+
+(C) Sebastian Kopp, 2015.
