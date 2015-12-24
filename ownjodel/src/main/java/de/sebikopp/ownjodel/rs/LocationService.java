@@ -77,11 +77,10 @@ public class LocationService {
 		GeoLocSpot gls = read.getGeoLocSpotById(id);
 		return gson.toJson(gls, GeoLocSpot.class);
 	}
-	// TODO Weitere Queries
 	@GET
 	@Path("/near/{lat}/{lon}")
 	public String getPostsNearYou(@PathParam("lat")String lat, @PathParam("lon") String lon){
-		// Ineffiziente Abfrage
+		// core query behind is still inefficient
 		GeoPosition queryPos = new GeoPosition();
 		queryPos.setLatitude(Double.parseDouble(lat));
 		queryPos.setLongitude(Double.parseDouble(lon));
@@ -92,11 +91,10 @@ public class LocationService {
 	@GET
 	@Path("/nearposts/{locname}")
 	public String getPostsByLocName(@PathParam("locname")String locName){
-		List<GeoLocSpot> relevSpots = read.getLocationsByName(locName);
-		Set<Post> rc = new TreeSet<>((Post o1, Post o2) -> o1.getId().compareTo(o2.getId()));
-		for (GeoLocSpot spot: relevSpots){
-			
-		}
-		return null;
+		List<Post> rc = read.readPostsByNamedLocation(locName);
+		Type type = new TypeToken<List<Post>>(){}.getType();
+		return gson.toJson(rc, type);
 	}
+	// TODO maybe further operations are needed
+
 }
