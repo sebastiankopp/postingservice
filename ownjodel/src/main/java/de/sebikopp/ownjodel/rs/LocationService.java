@@ -3,9 +3,6 @@ package de.sebikopp.ownjodel.rs;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
@@ -79,6 +76,7 @@ public class LocationService {
 	}
 	@GET
 	@Path("/near/{lat}/{lon}")
+	@Produces(MediaType.APPLICATION_JSON)
 	public String getPostsNearYou(@PathParam("lat")String lat, @PathParam("lon") String lon){
 		// core query behind is still inefficient
 		GeoPosition queryPos = new GeoPosition();
@@ -90,6 +88,7 @@ public class LocationService {
 	}
 	@GET
 	@Path("/nearposts/{locname}")
+	@Produces(MediaType.APPLICATION_JSON)
 	public String getPostsByLocName(@PathParam("locname")String locName){
 		List<Post> rc = read.readPostsByNamedLocation(locName);
 		Type type = new TypeToken<List<Post>>(){}.getType();

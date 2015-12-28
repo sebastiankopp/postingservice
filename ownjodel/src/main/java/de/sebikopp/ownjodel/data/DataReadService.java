@@ -1,6 +1,7 @@
 package de.sebikopp.ownjodel.data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,7 +18,6 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 
 import de.sebikopp.ownjodel.helpers.ConstantValues;
-import de.sebikopp.ownjodel.helpers.GeoLocDistanceCalculator;
 import de.sebikopp.ownjodel.helpers.convert.BsonUnmarshaller;
 import de.sebikopp.ownjodel.helpers.intercept.Stopwatch;
 import de.sebikopp.ownjodel.model.GeoLocSpot;
@@ -40,13 +40,22 @@ public class DataReadService {
 		mc.close();
 	}
 	@Interceptors(Stopwatch.class)
-	public List<Post> readNearPosts(GeoPosition pos){ // TODO Query optimization using spatial Mongodb API
+	public List<Post> readNearPosts(GeoPosition pos){ // TODO Check this critical operation
+		// see also https://docs.mongodb.org/v3.0/tutorial/geospatial-tutorial/
+		List<Double> ptCoords = Arrays.asList(pos.getLongitude(), pos.getLatitude());
+		Document ptDoc = new Document(ConstantValues.BSON_GEO_KEY_LOCTYPE, ConstantValues.BSON_LOCTYPE_POINT);
+		ptDoc.put(ConstantValues.BSON_GEO_KEY_COORDINATES, ptCoords);
+		
+		Document nearSphereDoc = new Document(ConstantValues.BSON_$GEOMETRY, ptDoc);
+		nearSphereDoc.put(ConstantValues.BSON_$MAXDIST, ConstantValues.MAX_DIST_NEAR_IN_METRES);
+		
+		Document geoOpQ = new Document(ConstantValues.BSON_$NEARSPHERE, nearSphereDoc);
+		
+		Document query = new Document(ConstantValues.JBSON_KEY_POST_GEOPOS, geoOpQ);
+		FindIterable<Document> lst = collPosts.find(query);
 		List<Post> rc = new ArrayList<>();
-		for (Document doc: collPosts.find()){
-			Post p = BsonUnmarshaller.bsonToPost(doc);
-			if (GeoLocDistanceCalculator.isNearLoc(p.getPos(), pos)){
-				rc.add(p);
-			}
+		for (Document doc: lst){
+			rc.add(BsonUnmarshaller.bsonToPost(doc));
 		}
 		return rc;
 	}

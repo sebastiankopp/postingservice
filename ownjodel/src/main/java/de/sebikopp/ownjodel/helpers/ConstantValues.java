@@ -31,4 +31,10 @@ public interface ConstantValues {
 	
 	public static final String BSON_LOCTYPE_POINT = "Point";
 	public static final String BSON_LOCTYPE_POLYGON = "Polygon";
+	
+	public static final String BSON_$GEOMETRY = "$geometry";
+	public static final String BSON_$MAXDIST ="$maxDistance";
+	public static final String BSON_$NEARSPHERE = "$nearSphere";
+	
+	public static final int MAX_DIST_NEAR_IN_METRES = 15000;
 }

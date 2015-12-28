@@ -4,7 +4,7 @@ import de.sebikopp.ownjodel.model.GeoPosition;
 
 public class GeoLocDistanceCalculator {
 	private static final double R_ERDE = 6370; // in km
-	private static final double MAX_DIST_FOR_NEAR_LOC = 15; // km
+	public static final double MAX_DIST_FOR_NEAR_LOC = 15; // km
 	public static boolean isNearLoc(GeoPosition pos, GeoPosition spot){
 		return calcDistance(pos, spot) <= MAX_DIST_FOR_NEAR_LOC;
 	}
