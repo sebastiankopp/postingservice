@@ -9,6 +9,8 @@ Dependencies needed at compile time are available at mavenCentral. Currently the
 * [Gson (currently used version: 2.5)](http://search.maven.org/#artifactdetails|com.google.code.gson|gson|2.5|jar)
 * [MongoDB Java driver (currently used version: 3.0.4)](http://search.maven.org/#artifactdetails|org.mongodb|mongodb-driver|3.0.4|jar)
 
-These dependencies are auto-downloaded and included at compile time (see [pom.xml](https://github.com/sebikopp/postingservice/blob/master/ownjodel/pom.xml)).
+These dependencies are auto-downloaded and included at compile time (see [pom.xml](https://github.com/sebikopp/postingservice/blob/master/ownjodel/pom.xml)). They are licensed under the Apache License 2.0.
+
+For the web view, JQuery 2.1.4 is used as a JavaScript library. It is contained in this repo and licensed under the MIT license.
 
 (C) Sebastian Kopp, 2015.
