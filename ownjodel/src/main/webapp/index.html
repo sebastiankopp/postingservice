@@ -3,8 +3,126 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Running</title>
+<script src="./jquery-2.1.4.js"></script>
+<style type="text/css">
+.textcontent{
+	width: 700px;
+	height: 400px;
+	overflow: scroll;
+}
+</style>
 </head>
 <body>
 <h1>Ownjodel is now running</h1>
+<hr />
+<h1>Write a post</h1>
+<form id="f_create_post">
+	<script type="text/javascript">
+	function submitPost(){
+		var myData = new Object();
+		try {
+			myData.latitude = parseFloat(document.getElementById('tf_create_post_lat').value);
+			myData.longitude = parseFloat(document.getElementById('tf_create_post_lon').value);
+		} catch (errx){
+			window.alert('Fehler beim Parsen aufgetreten.');
+			return false;
+		}
+		myData.title = document.getElementById('tf_create_post_title').value;
+		myData.content = document.getElementById('tf_create_post_content').value;
+		$.ajax({
+		    type: "POST",
+		    url: "/ownjodel/rs/posts",
+		    // The key needs to match your method's input parameter (case-sensitive).
+		    data: JSON.stringify(myData),
+		    contentType: "application/json; charset=iso-8859-1",
+		    dataType: "json",
+		    success: function(data){
+			    refreshData();
+			},
+		    failure: function(errMsg) {
+		        alert(errMsg);
+		    }
+		});
+	}
+	function getLocation() {
+	    if (navigator.geolocation) {
+	        navigator.geolocation.getCurrentPosition(showPosition);
+	    } else {
+	        console.log("Geolocation is not supported by this browser.");
+	    }
+	}
+	function showPosition(position) {
+		document.getElementById('tf_create_post_lat').value = String(position.coords.latitude);
+		document.getElementById('tf_create_post_lon').value = String(position.coords.longitude);
+	}
+	function refreshData(){
+		$.ajax({
+		    type: "GET",
+		    url: "/ownjodel/rs/posts",
+		    // The key needs to match your method's input parameter (case-sensitive).
+		    contentType: "application/json; charset=iso-8859-1",
+		    dataType: "json",
+		    success: function(data){
+		    	var resp = '';
+			    console.log('Received: ' + JSON.stringify(data));
+			    try {
+			    	for (var i = 0; i < data.length; i++) {
+						try {
+			    			resp += '<p>';
+			    			resp += '<b>Title</b>: ' + (data[i].title) + '<br />';
+			    			console.log('Received Title: ' + data[i].title);
+			    			resp += '<b>Content</b>: ' + (data[i].content) + '<br />';
+			    			console.log('Received Content: ' + data[i].content);
+			    			if (typeof(data[i].pos.latitude) == 'number')
+			    				resp += '<b>Latitude</b>: ' + data[i].pos.latitude + '<br />';
+			    			if (typeof(data[i].pos.longitude) == 'number')
+			    				resp += '<b>Longitude</b>: ' + data[i].pos.longitude + '<br />';
+			    			resp += '</p>';
+			    			console.log('Resp: '+ resp);
+				    	} catch (error1){
+					    	console.log(error1);
+					    }
+					}
+					document.getElementById('textdiv').innerHTML = resp;
+			    } catch (error2) {
+					console.log(error2);
+				}
+			},
+		    failure: function(errMsg) {
+		        alert(errMsg);
+		    }
+		});
+	}
+//	function replaceAgainstCodeInjection(var str){
+//		var retVal = str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+//		return retVal;
+//	}
+	</script>
+	<table id="table-1">
+		<tbody>
+			<tr>
+				<td>Title:</td>
+				<td><input type="text" id="tf_create_post_title"></td>
+			</tr>
+			<tr>
+				<td>Content:</td>
+				<td><input type="text" id="tf_create_post_content"></td>
+			</tr>
+			<tr>
+				<td>Latitude:</td>
+				<td><input type="text" id="tf_create_post_lat" /></td>
+			</tr>
+			<tr>
+				<td>Longitude:</td>
+				<td><input type="text" id="tf_create_post_lon"  /></td>
+			</tr>
+		</tbody>
+	</table>
+	<button type="button" onclick="submitPost()" >Submit Post</button>
+	<button type="button" onclick="getLocation()">Insert Location</button> 
+	<button type="button" onclick="refreshData()">Refresh Data</button>
+</form>
+<hr />
+<div class="textcontent" id="textdiv"></div>
 </body>
 </html>

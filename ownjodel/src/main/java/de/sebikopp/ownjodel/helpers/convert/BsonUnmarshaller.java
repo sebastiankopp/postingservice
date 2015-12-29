@@ -37,9 +37,9 @@ public class BsonUnmarshaller {
 			subposts = new ArrayList<>(1);
 		}
 		
-		rc.setContent(src.getString(ConstantValues.JBSON_KEY_POST_CONTENT));
-		rc.setTitle(src.getString(ConstantValues.JBSON_KEY_POST_TITLE));
-		rc.setId(src.getString(ConstantValues.JBSON_KEY_POST_ID));
+		rc.setContent(StringConverter.escapeHtml(src.getString(ConstantValues.JBSON_KEY_POST_CONTENT)));
+		rc.setTitle(StringConverter.escapeHtml(src.getString(ConstantValues.JBSON_KEY_POST_TITLE)));
+		rc.setId(StringConverter.escapeHtml(src.getString(ConstantValues.JBSON_KEY_POST_ID)));
 		
 		rc.setSubposts(subposts);
 		rc.setVotes(votes);
@@ -60,7 +60,7 @@ public class BsonUnmarshaller {
 	}
 	public static Vote bsonToVote(Document src){
 		Vote rc = new Vote();
-		String jsessid = src.getString(ConstantValues.JBSON_KEY_VOTE_SESSIONID);
+		String jsessid = StringConverter.escapeHtml(src.getString(ConstantValues.JBSON_KEY_VOTE_SESSIONID));
 		Boolean upvote = src.getBoolean(ConstantValues.JBSON_KEY_VOTE_BOOL_UPVOTE);
 		if (jsessid == null || upvote == null)
 			throw new NullPointerException("Mind. 1 Parameter einer Vote-Instanz nicht instantiiert.");
@@ -82,8 +82,8 @@ public class BsonUnmarshaller {
 	public static GeoLocSpot bsonToGeoLocSpot(Document src){
 		Document _gpos = (Document) src.get(ConstantValues.JBSON_KEY_GEO_LOC_SPOT_GEOPOS);
 		GeoPosition gpos = BsonUnmarshaller.bsonToGeopos(_gpos);
-		String glsid = src.getString(ConstantValues.JBSON_KEY_GEO_LOC_SPOT_ID);
-		String name = src.getString(ConstantValues.JBSON_KEY_GEO_LOC_SPOT_NAME);
+		String glsid = StringConverter.escapeHtml(src.getString(ConstantValues.JBSON_KEY_GEO_LOC_SPOT_ID));
+		String name = StringConverter.escapeHtml(src.getString(ConstantValues.JBSON_KEY_GEO_LOC_SPOT_NAME));
 		GeoLocSpot rc = new GeoLocSpot();
 		rc.setId(glsid);
 		rc.setName(name);
