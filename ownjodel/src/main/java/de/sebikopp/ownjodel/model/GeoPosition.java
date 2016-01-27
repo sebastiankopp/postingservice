@@ -1,12 +1,13 @@
 package de.sebikopp.ownjodel.model;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class GeoPosition {
-	@Min(-90) @Max(90)
 	private double latitude;
-	@Min(-180) @Max(180)
 	private double longitude;
 	public double getLatitude() {
 		return latitude;

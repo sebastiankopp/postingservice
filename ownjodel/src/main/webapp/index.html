@@ -38,6 +38,7 @@
 		    dataType: "json",
 		    success: function(data){
 			    refreshData();
+			    clearFields();
 			},
 		    failure: function(errMsg) {
 		        alert(errMsg);
@@ -93,6 +94,102 @@
 		    }
 		});
 	}
+	function getPosForPosts(){
+		if (navigator.geolocation) {
+	        navigator.geolocation.getCurrentPosition(refreshOnlyNearPosts);
+	    } else {
+	        console.log("Geolocation is not supported by this browser.");
+	    }
+	}
+	function refreshOnlyNearPosts(position){
+		var lat = position.coords.latitude;
+		var lon = position.coords.longitude;
+		
+		$.ajax({
+		    type: "GET",
+		    url: "/ownjodel/rs/loc/near/" + lat + "/" + lon,
+		    // The key needs to match your method's input parameter (case-sensitive).
+		    contentType: "application/json; charset=iso-8859-1",
+		    dataType: "json",
+		    success: function(data){
+		    	var resp = '';
+			    console.log('Received: ' + JSON.stringify(data));
+			    try {
+			    	for (var i = 0; i < data.length; i++) {
+						try {
+			    			resp += '<p>';
+			    			resp += '<b>Title</b>: ' + (data[i].title) + '<br />';
+			    			console.log('Received Title: ' + data[i].title);
+			    			resp += '<b>Content</b>: ' + (data[i].content) + '<br />';
+			    			console.log('Received Content: ' + data[i].content);
+			    			if (typeof(data[i].pos.latitude) == 'number')
+			    				resp += '<b>Latitude</b>: ' + data[i].pos.latitude + '<br />';
+			    			if (typeof(data[i].pos.longitude) == 'number')
+			    				resp += '<b>Longitude</b>: ' + data[i].pos.longitude + '<br />';
+			    			resp += '</p>';
+			    			console.log('Resp: '+ resp);
+				    	} catch (error1){
+					    	console.log(error1);
+					    }
+					}
+					document.getElementById('textdiv').innerHTML = resp;
+			    } catch (error2) {
+					console.log(error2);
+				}
+			},
+		    failure: function(errMsg) {
+		        alert(errMsg);
+		    }
+		});
+	}
+	function searchByPos(){
+		var lat = parseFloat(document.getElementById('tf_search_posts_loc_lat').value).toString();
+		var lon = parseFloat(document.getElementById('tf_search_posts_loc_lon').value).toString();
+		$.ajax({
+		    type: "GET",
+		    url: "/ownjodel/rs/loc/near/" + lat + "/" + lon,
+		    // The key needs to match your method's input parameter (case-sensitive).
+		    contentType: "application/json; charset=iso-8859-1",
+		    dataType: "json",
+		    success: function(data){
+		    	var resp = '';
+			    console.log('Received: ' + JSON.stringify(data));
+			    try {
+			    	for (var i = 0; i < data.length; i++) {
+						try {
+			    			resp += '<p>';
+			    			resp += '<b>Title</b>: ' + (data[i].title) + '<br />';
+			    			console.log('Received Title: ' + data[i].title);
+			    			resp += '<b>Content</b>: ' + (data[i].content) + '<br />';
+			    			console.log('Received Content: ' + data[i].content);
+			    			if (typeof(data[i].pos.latitude) == 'number')
+			    				resp += '<b>Latitude</b>: ' + data[i].pos.latitude + '<br />';
+			    			if (typeof(data[i].pos.longitude) == 'number')
+			    				resp += '<b>Longitude</b>: ' + data[i].pos.longitude + '<br />';
+			    			resp += '</p>';
+			    			console.log('Resp: '+ resp);
+				    	} catch (error1){
+					    	console.log(error1);
+					    }
+					}
+					document.getElementById('textdiv').innerHTML = resp;
+			    } catch (error2) {
+					console.log(error2);
+				}
+			},
+		    failure: function(errMsg) {
+		        alert(errMsg);
+		    }
+		});
+	}
+
+	function clearFields(body){
+		document.getElementById('tf_create_post_title').value = '';
+		document.getElementById('tf_create_post_content').value = '';
+		document.getElementById('tf_create_post_lat').value = '';
+		document.getElementById('tf_create_post_lon').value = '';
+	}
+
 //	function replaceAgainstCodeInjection(var str){
 //		var retVal = str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 //		return retVal;
@@ -121,8 +218,27 @@
 	<button type="button" onclick="submitPost()" >Submit Post</button>
 	<button type="button" onclick="getLocation()">Insert Location</button> 
 	<button type="button" onclick="refreshData()">Refresh Data</button>
+	<button type="button" onclick="getPosForPosts()">Show near posts</button>
+	<p />
+	<b>Posts near a specified location:</b>
+	<table>
+		<tbody>
+			<tr>
+				<td>Latitude:</td>
+				<td><input type="text" id="tf_search_posts_loc_lat"></td>
+			</tr>
+			<tr>
+				<td>Longitude:</td>
+				<td><input type="text" id="tf_search_posts_loc_lon"></td>
+			</tr>
+		</tbody>
+	</table>
+	<button type="button" onclick="searchByPos()">Search</button>
 </form>
 <hr />
 <div class="textcontent" id="textdiv"></div>
+<script type="text/javascript">
+refreshData();
+</script>
 </body>
 </html>

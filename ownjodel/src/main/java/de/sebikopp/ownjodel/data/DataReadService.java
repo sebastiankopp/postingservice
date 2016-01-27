@@ -24,7 +24,13 @@ import de.sebikopp.ownjodel.model.GeoLocSpot;
 import de.sebikopp.ownjodel.model.GeoPosition;
 import de.sebikopp.ownjodel.model.Post;
 
+/**
+ * Service performing read-only operations on the MongoDB back-end of this application.
+ * @author Sebastian
+ *
+ */
 @Stateless
+@Interceptors(Stopwatch.class)
 public class DataReadService {
 	private MongoClient mc;
 	private MongoCollection<Document> collLocs;
@@ -39,8 +45,12 @@ public class DataReadService {
 	public void preDestroy(){
 		mc.close();
 	}
-	@Interceptors(Stopwatch.class)
-	public List<Post> readNearPosts(GeoPosition pos){ // TODO Check this critical operation
+	/**
+	 * Returns posts within a circle of 15000 metres using the geospatial API of MongoDB. (shall i use the german, anglo-american or swiss notation? ;))
+	 * @param pos centre of the specifed circle
+	 * @return see above
+	 */
+	public List<Post> readNearPosts(GeoPosition pos){
 		// see also https://docs.mongodb.org/v3.0/tutorial/geospatial-tutorial/
 		List<Double> ptCoords = Arrays.asList(pos.getLongitude(), pos.getLatitude());
 		Document ptDoc = new Document(ConstantValues.BSON_GEO_KEY_LOCTYPE, ConstantValues.BSON_LOCTYPE_POINT);
@@ -59,7 +69,6 @@ public class DataReadService {
 		}
 		return rc;
 	}
-	@Interceptors(Stopwatch.class)
 	public List<Post> readPostsByNamedLocation(String locname){	
 		List<GeoLocSpot> spots = getLocationsByName(locname);
 		Set<Post> rc = new HashSet<>();
@@ -68,7 +77,6 @@ public class DataReadService {
 		}
 		return new ArrayList<>(rc);
 	}
-	@Interceptors(Stopwatch.class)
 	public List<GeoLocSpot> getAllNamedLocations(){
 		List<GeoLocSpot> rc = new ArrayList<>();
 		for (Document dd: collLocs.find()){
@@ -76,7 +84,6 @@ public class DataReadService {
 		}
 		return rc;
 	}
-	@Interceptors(Stopwatch.class)
 	public GeoLocSpot getGeoLocSpotById(String id) {
 		Document query = new Document(ConstantValues.JBSON_KEY_GEO_LOC_SPOT_ID, id);
 		FindIterable<Document> lst = collLocs.find(query);
@@ -84,7 +91,6 @@ public class DataReadService {
 		rc = BsonUnmarshaller.bsonToGeoLocSpot(lst.first());
 		return rc;
 	}
-	@Interceptors(Stopwatch.class)
 	public Post getPostById(String fatherId) {
 		Document query = new Document(ConstantValues.JBSON_KEY_POST_ID, fatherId);
 		FindIterable<Document> lst = collLocs.find(query);
@@ -96,7 +102,6 @@ public class DataReadService {
 		}
 		return rc;
 	}
-	@Interceptors(Stopwatch.class)
 	public List<GeoLocSpot> getLocationsByName(String name){
 		Document query = new Document().append(ConstantValues.JBSON_KEY_GEO_LOC_SPOT_NAME, name);
 		FindIterable<Document> lst = collLocs.find(query);
@@ -106,7 +111,7 @@ public class DataReadService {
 		}
 		return rc;
 	}
-	@Interceptors(Stopwatch.class)	// only intended for prototype phase
+		// only intended for prototype phase
 	public List<Post> getAllPosts(){
 		List<Post> rc = new ArrayList<>();
 		for (Document dd: collPosts.find()){

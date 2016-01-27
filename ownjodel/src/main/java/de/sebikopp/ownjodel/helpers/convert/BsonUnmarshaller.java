@@ -50,11 +50,11 @@ public class BsonUnmarshaller {
 		String ldtStr = src.getString(ConstantValues.JBSON_KEY_POST_DATETIME);
 		LocalDateTime ldt = null;
 		try {
-			ldt = LocalDateTime.parse(ldtStr, DateTimeFormatter.ofPattern(ConstantValues.DATE_TIME_PATTERN));
+			ldt = LocalDateTime.parse(ldtStr, DateTimeFormatter.ISO_DATE_TIME);
 		} catch (Exception e) {
-			System.err.println(ldtStr + " konnte nicht nach dem Schema " + ConstantValues.DATE_TIME_PATTERN + " geparst werden.");
+			System.err.println(ldtStr + " konnte nicht nach dem Schema " + DateTimeFormatter.ISO_DATE_TIME.toString() + " geparst werden.");
 		}
-		rc.setLdt(ldt);
+		rc.setDateTime(ldt);
 		
 		return rc;
 	}

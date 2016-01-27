@@ -27,7 +27,7 @@ public class BsonMarshaller {
 				.append(ConstantValues.JBSON_KEY_POST_TITLE, p.getTitle())
 				.append(ConstantValues.JBSON_KEY_POST_CONTENT, p.getContent())
 				.append(ConstantValues.JBSON_KEY_POST_SUBPOSTS, subposts)
-				.append(ConstantValues.JBSON_KEY_POST_DATETIME, p.getLdt().format(DateTimeFormatter.ofPattern(ConstantValues.DATE_TIME_PATTERN)))
+				.append(ConstantValues.JBSON_KEY_POST_DATETIME, p.getDateTime().format(DateTimeFormatter.ISO_DATE_TIME))
 				.append(ConstantValues.JBSON_KEY_POST_GEOPOS, convertGeoposToBson(p.getPos()))
 				.append(ConstantValues.JBSON_KEY_POST_VOTES, votes);
 		return doc;

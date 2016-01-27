@@ -3,12 +3,18 @@ package de.sebikopp.ownjodel.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Post {
 	private String id;
 	private String content;
 	private String title;
 	private List<Post> subposts;
-	private LocalDateTime ldt;
+	private LocalDateTime dateTime;
 	private GeoPosition pos;
 	private List<Vote> votes;
 	public String getId() {
@@ -23,11 +29,11 @@ public class Post {
 	public void setSubposts(List<Post> subposts) {
 		this.subposts = subposts;
 	}
-	public LocalDateTime getLdt() {
-		return ldt;
+	public LocalDateTime getDateTime() {
+		return dateTime;
 	}
-	public void setLdt(LocalDateTime ldt) {
-		this.ldt = ldt;
+	public void setDateTime(LocalDateTime dateTime) {
+		this.dateTime = dateTime;
 	}
 	public GeoPosition getPos() {
 		return pos;

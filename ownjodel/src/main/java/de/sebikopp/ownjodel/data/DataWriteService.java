@@ -12,11 +12,19 @@ import com.mongodb.client.MongoCollection;
 
 import de.sebikopp.ownjodel.helpers.ConstantValues;
 import de.sebikopp.ownjodel.helpers.convert.BsonMarshaller;
+import de.sebikopp.ownjodel.helpers.convert.BsonUnmarshaller;
 import de.sebikopp.ownjodel.helpers.intercept.Stopwatch;
 import de.sebikopp.ownjodel.model.GeoLocSpot;
 import de.sebikopp.ownjodel.model.Post;
+import de.sebikopp.ownjodel.model.Vote;
 
+/**
+ * Service providing create and update operations on the database. Delete will be supported later...
+ * @author Sebastian
+ *
+ */
 @Stateless
+@Interceptors(Stopwatch.class)
 public class DataWriteService {
 	private MongoClient mc;
 	private MongoCollection<Document> collPosts;
@@ -33,19 +41,28 @@ public class DataWriteService {
 	public void predestroy() {
 		mc.close();
 	}
-	@Interceptors(Stopwatch.class)
 	public void persistNewPost(Post post) {
 		Document toIns = BsonMarshaller.postToBson(post);
 		collPosts.insertOne(toIns);
 	}
-	@Interceptors(Stopwatch.class)
 	public void updatePost(Post refreshed) {
 		Document searchObj = new Document().append(ConstantValues.JBSON_KEY_POST_ID, refreshed.getId());
 		collPosts.replaceOne(searchObj, BsonMarshaller.postToBson(refreshed));
 	}
-	@Interceptors(Stopwatch.class)
 	public void persistNewLocation(GeoLocSpot gls) {
 		Document toIns = BsonMarshaller.geoLocSpotToBson(gls);
 		collLocs.insertOne(toIns);
+	}
+	public Post votePost(String postId, boolean up, String sessionData) {
+		Document filter=new Document(ConstantValues.JBSON_KEY_POST_ID, postId);
+		Document found = collPosts.find(filter).first();
+		Vote vote = new Vote();
+		vote.setJsessionid(sessionData); 
+		vote.setUp(up);
+		Post obj = BsonUnmarshaller.bsonToPost(found);
+		obj.getVotes().add(vote);
+		Document upd = BsonMarshaller.postToBson(obj);
+		collPosts.findOneAndReplace(filter, upd);
+		return obj;
 	}
 }
