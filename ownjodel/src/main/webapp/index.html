@@ -78,6 +78,7 @@
 			    				resp += '<b>Latitude</b>: ' + data[i].pos.latitude + '<br />';
 			    			if (typeof(data[i].pos.longitude) == 'number')
 			    				resp += '<b>Longitude</b>: ' + data[i].pos.longitude + '<br />';
+			    			resp += '<a href="/ownjodel/PdfServlet?id=' + data[i].id + '" target="_blank" >Pdf</a> <br />'; 
 			    			resp += '</p>';
 			    			console.log('Resp: '+ resp);
 				    	} catch (error1){
@@ -126,6 +127,7 @@
 			    				resp += '<b>Latitude</b>: ' + data[i].pos.latitude + '<br />';
 			    			if (typeof(data[i].pos.longitude) == 'number')
 			    				resp += '<b>Longitude</b>: ' + data[i].pos.longitude + '<br />';
+			    			resp += '<a href="/PdfServlet?id='+ data[i].id + '" target="_blank" >PDF</a>';
 			    			resp += '</p>';
 			    			console.log('Resp: '+ resp);
 				    	} catch (error1){
@@ -166,6 +168,7 @@
 			    				resp += '<b>Latitude</b>: ' + data[i].pos.latitude + '<br />';
 			    			if (typeof(data[i].pos.longitude) == 'number')
 			    				resp += '<b>Longitude</b>: ' + data[i].pos.longitude + '<br />';
+				    		resp += '<a href="/PdfServlet?id='+ data[i].id + '" target="_blank" >PDF</a>';	
 			    			resp += '</p>';
 			    			console.log('Resp: '+ resp);
 				    	} catch (error1){
@@ -182,7 +185,33 @@
 		    }
 		});
 	}
-
+	function votePost(postid, xup){
+		var upvote = new Object();
+		if (!(typeof up === 'boolean') || ){
+			alert ('Type error. up not boolean');
+			return false;
+		} else if (!(typeof postid === 'string')){
+			alert ('type error. postid not string');
+			return false;
+		}
+		upvote.up = xup;
+		$.ajax({
+			type: "PUT",
+		    url: "/ownjodel/rs/posts/" + postid,
+		    // The key needs to match your method's input parameter (case-sensitive).
+		    data: JSON.stringify(upvote),
+		    contentType: "application/json; charset=iso-8859-1",
+		    dataType: "json",
+		    success: function(data){
+			    refreshData();
+			    clearFields();
+			},
+		    failure: function(errMsg) {
+		        alert(errMsg);
+		    }
+			
+		});
+	}
 	function clearFields(body){
 		document.getElementById('tf_create_post_title').value = '';
 		document.getElementById('tf_create_post_content').value = '';

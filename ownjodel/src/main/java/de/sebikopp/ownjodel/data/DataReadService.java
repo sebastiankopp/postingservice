@@ -91,9 +91,11 @@ public class DataReadService {
 		rc = BsonUnmarshaller.bsonToGeoLocSpot(lst.first());
 		return rc;
 	}
-	public Post getPostById(String fatherId) {
-		Document query = new Document(ConstantValues.JBSON_KEY_POST_ID, fatherId);
-		FindIterable<Document> lst = collLocs.find(query);
+	public Post getPostById(String postId) {
+		Document query = new Document(ConstantValues.JBSON_KEY_POST_ID, postId);
+		System.out.println("Requesting documents that match " + query);
+		System.out.println("Total size postscollection: "+ collPosts.count());
+		FindIterable<Document> lst = collPosts.find(query);
 		Post rc = null;
 		try {
 			rc = BsonUnmarshaller.bsonToPost(lst.first());

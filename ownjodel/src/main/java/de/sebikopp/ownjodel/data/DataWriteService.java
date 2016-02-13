@@ -3,6 +3,7 @@ package de.sebikopp.ownjodel.data;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 
 import org.bson.Document;
@@ -29,7 +30,8 @@ public class DataWriteService {
 	private MongoClient mc;
 	private MongoCollection<Document> collPosts;
 	private MongoCollection<Document> collLocs;
-
+	@Inject
+	private DataReadService read;
 	@PostConstruct
 	public void init() {
 		mc = new MongoClient();
@@ -54,15 +56,13 @@ public class DataWriteService {
 		collLocs.insertOne(toIns);
 	}
 	public Post votePost(String postId, boolean up, String sessionData) {
-		Document filter=new Document(ConstantValues.JBSON_KEY_POST_ID, postId);
-		Document found = collPosts.find(filter).first();
 		Vote vote = new Vote();
 		vote.setJsessionid(sessionData); 
 		vote.setUp(up);
-		Post obj = BsonUnmarshaller.bsonToPost(found);
+		Post obj = read.getPostById(postId);
 		obj.getVotes().add(vote);
 		Document upd = BsonMarshaller.postToBson(obj);
-		collPosts.findOneAndReplace(filter, upd);
+		collPosts.findOneAndReplace(new Document(ConstantValues.JBSON_KEY_POST_ID, postId), upd);
 		return obj;
 	}
 }

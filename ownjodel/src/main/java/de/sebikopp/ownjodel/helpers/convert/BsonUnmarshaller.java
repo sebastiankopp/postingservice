@@ -39,7 +39,7 @@ public class BsonUnmarshaller {
 		
 		rc.setContent(StringConverter.escapeHtml(src.getString(ConstantValues.JBSON_KEY_POST_CONTENT)));
 		rc.setTitle(StringConverter.escapeHtml(src.getString(ConstantValues.JBSON_KEY_POST_TITLE)));
-		rc.setId(StringConverter.escapeHtml(src.getString(ConstantValues.JBSON_KEY_POST_ID)));
+		rc.setId((src.getString(ConstantValues.JBSON_KEY_POST_ID)));
 		
 		rc.setSubposts(subposts);
 		rc.setVotes(votes);
