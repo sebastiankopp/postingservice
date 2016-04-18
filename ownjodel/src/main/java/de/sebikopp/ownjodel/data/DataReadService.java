@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 
 import org.bson.Document;
@@ -32,12 +33,13 @@ import de.sebikopp.ownjodel.model.Post;
 @Stateless
 @Interceptors(Stopwatch.class)
 public class DataReadService {
+	@Inject
 	private MongoClient mc;
 	private MongoCollection<Document> collLocs;
 	private MongoCollection<Document> collPosts;
 	@PostConstruct
 	public void init(){
-		mc = new MongoClient();
+//		mc = new MongoClient();
 		collLocs = mc.getDatabase(ConstantValues.MONGO_DB_NAME).getCollection(ConstantValues.LOCATIONS_COLLECTION);
 		collPosts = mc.getDatabase(ConstantValues.MONGO_DB_NAME).getCollection(ConstantValues.POSTS_COLLECTION);
 	}

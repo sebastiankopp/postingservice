@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.UriBuilder;
 
 public class WebTargetFactory {
@@ -24,8 +25,8 @@ public class WebTargetFactory {
 			host = props.getProperty(PROP_HOST).trim();
 			port = Integer.parseInt(props.getProperty(PROP_PORT).trim());
 //			client = ClientBuilder.newClient();
+		
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.exit(1);
 		}

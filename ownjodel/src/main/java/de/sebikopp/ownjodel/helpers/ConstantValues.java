@@ -1,6 +1,10 @@
 package de.sebikopp.ownjodel.helpers;
 
 public interface ConstantValues {
+	public static final int MONGO_DEFAUT_PORT = 27017;
+	public static final String PATH_TO_MONGO_PROPS = "props/mongo.properties";
+	public static final String MONGO_PROP_KEY_PORT = "port";
+	public static final String MONGO_PROP_KEY_HOST = "host";
 	public static final String MONGO_DB_NAME = "ownjodeldb";
 	public static final String POSTS_COLLECTION = "postscollection";
 	public static final String LOCATIONS_COLLECTION = "locscollection";
@@ -35,6 +39,10 @@ public interface ConstantValues {
 	public static final String BSON_$GEOMETRY = "$geometry";
 	public static final String BSON_$MAXDIST ="$maxDistance";
 	public static final String BSON_$NEARSPHERE = "$nearSphere";
-	
+	/**
+	 * Upper limit of &quot;short&quot; distances (&quot;near&quot;):
+	 * {@value} metres
+	 */
 	public static final int MAX_DIST_NEAR_IN_METRES = 15000;
+	
 }

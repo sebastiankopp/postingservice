@@ -13,7 +13,6 @@ import com.mongodb.client.MongoCollection;
 
 import de.sebikopp.ownjodel.helpers.ConstantValues;
 import de.sebikopp.ownjodel.helpers.convert.BsonMarshaller;
-import de.sebikopp.ownjodel.helpers.convert.BsonUnmarshaller;
 import de.sebikopp.ownjodel.helpers.intercept.Stopwatch;
 import de.sebikopp.ownjodel.model.GeoLocSpot;
 import de.sebikopp.ownjodel.model.Post;
@@ -27,6 +26,7 @@ import de.sebikopp.ownjodel.model.Vote;
 @Stateless
 @Interceptors(Stopwatch.class)
 public class DataWriteService {
+	@Inject
 	private MongoClient mc;
 	private MongoCollection<Document> collPosts;
 	private MongoCollection<Document> collLocs;
@@ -34,7 +34,7 @@ public class DataWriteService {
 	private DataReadService read;
 	@PostConstruct
 	public void init() {
-		mc = new MongoClient();
+//		mc = new MongoClient();
 		collPosts = mc.getDatabase(ConstantValues.MONGO_DB_NAME).getCollection(ConstantValues.POSTS_COLLECTION);
 		collLocs = mc.getDatabase(ConstantValues.MONGO_DB_NAME).getCollection(ConstantValues.LOCATIONS_COLLECTION);
 	}
